@@ -1,6 +1,5 @@
-from pathlib import Path
-
 from datetime import timedelta
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -10,6 +9,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,8 +18,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api',
+    'api.apps.ApiConfig',
     'posts',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'yatube_api.wsgi.application'
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 
 DATABASES = {
@@ -91,10 +98,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
